@@ -14,9 +14,48 @@ const (
 	Month                  = "month"
 )
 
-func GroupTransactions(transactions []*Transaction, interval GroupingInterval) (groupped []*Transaction) {
-	fmt.Println("gropuing")
-	return
+func GroupTransactions(transactions []*Transaction, interval GroupingInterval) ([]*Transaction, error) {
+	groupped := make([]*Transaction, 0)
+	var truncatedTime *time.Time
+	var latestTransaction *Transaction
+	for index, transaction := range transactions {
+		currentTransactionTruncatedTime, err := Truncate(transaction.Timestamp.Time, interval)
+		if err != nil {
+			return nil, err
+		}
+		if truncatedTime == nil {
+			// first iteraction
+			truncatedTime = &currentTransactionTruncatedTime
+			latestTransaction = transaction
+		}
+		if currentTransactionTruncatedTime == *truncatedTime {
+			// still processing same bucket
+			// compare and keep latest transaction
+			if latestTransaction.Timestamp.Time.Before(transaction.Timestamp.Time) {
+				latestTransaction = transaction
+			}
+		} else {
+			// closing old bucket
+			truncatedTransaction := *latestTransaction
+			truncatedTransaction.Timestamp.Time = *truncatedTime
+			fmt.Println("appenging ", truncatedTransaction)
+			groupped = append(groupped, &truncatedTransaction)
+			// starting new bucket
+			truncatedTime = &currentTransactionTruncatedTime
+			latestTransaction = transaction
+		}
+
+		if index == len(transactions)-1 {
+			// processing the last transaction
+			// 'closing old bucket' will not get evaluated
+			// closing last bucket
+			truncatedTransaction := *latestTransaction
+			truncatedTransaction.Timestamp.Time = *truncatedTime
+			fmt.Println("appenging ", truncatedTransaction)
+			groupped = append(groupped, &truncatedTransaction)
+		}
+	}
+	return groupped, nil
 }
 
 func Truncate(t time.Time, interval GroupingInterval) (time.Time, error) {

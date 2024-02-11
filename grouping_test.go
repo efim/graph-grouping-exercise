@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -22,30 +23,35 @@ func TestGrouping(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	for _, tr := range inputTransactions {
-		t.Log(*tr)
-	}
-}
-
-func TestCheckExpectedResult(t *testing.T) {
-	filepath := "test-data/example-result-1.json"
-	fileContent, err := ioutil.ReadFile(filepath)
+	expectedResultsFilepath := "test-data/example-result-1.json"
+	expectedResultsFileContent, err := ioutil.ReadFile(expectedResultsFilepath)
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	var inputTransactions []*Transaction
-	err = json.Unmarshal(fileContent, &inputTransactions)
+	var expectedTransactions []*Transaction
+	err = json.Unmarshal(expectedResultsFileContent, &expectedTransactions)
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	for _, tr := range inputTransactions {
-		t.Log(*tr)
+	grouppedByDay, err := GroupTransactions(inputTransactions, Day)
+	if err != nil {
+		t.Error(err)
 	}
 
+	if len(grouppedByDay) != len(expectedTransactions) {
+		t.Error("unequal lengths of groupped and expected: ", grouppedByDay, expectedTransactions)
+	}
+
+	for i, v := range grouppedByDay {
+		expected := expectedTransactions[i]
+		if !reflect.DeepEqual(v, expected) {
+			t.Errorf("slices differ at index %d : %s not equal to expected %s", i, v, expected)
+		}
+	}
 }
 
 func TestTruncateToHour(t *testing.T) {

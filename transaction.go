@@ -12,6 +12,10 @@ type Transaction struct {
 	Timestamp UnixTime `json:"timestamp"`
 }
 
+func (t *Transaction) String() string {
+	return fmt.Sprint(*t)
+}
+
 type UnixTime struct {
 	time.Time
 }
