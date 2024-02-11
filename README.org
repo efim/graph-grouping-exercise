@@ -1,1 +1,32 @@
 #+title: Exercise on grouping data for time interval graphs
+
+* This program contains function that satisfies following requirements:
+
+1. take in slice of =Transaction= structs
+   #+begin_src go
+type Transaction struct {
+	Value		int
+	Timestamp     time.Time
+}
+   #+end_src
+2. group them by truncating timestamp down to closest 'hour', 'day', 'week', 'month'
+3. keeps latest transaction
+
+* To use the program
+** if you have go installed:
+#+begin_src bash
+go build
+./graph-grouping-exercise test-data/example-transactions-1.json hour
+#+end_src
+
+call the executable with path to input data json and interval
+
+** or using nix to get dependencies locked in flake.lock
+#+begin_src bash
+nix develop
+go build
+./graph-grouping-exercise test-data/example-transactions-1.json hour
+#+end_src
+
+** or using the =GroupTransactions= function directly from code
+by passing in your data structures

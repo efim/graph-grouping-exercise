@@ -38,7 +38,6 @@ func GroupTransactions(transactions []*Transaction, interval GroupingInterval) (
 			// closing old bucket
 			truncatedTransaction := *latestTransaction
 			truncatedTransaction.Timestamp.Time = *truncatedTime
-			fmt.Println("appenging ", truncatedTransaction)
 			groupped = append(groupped, &truncatedTransaction)
 			// starting new bucket
 			truncatedTime = &currentTransactionTruncatedTime
@@ -51,7 +50,6 @@ func GroupTransactions(transactions []*Transaction, interval GroupingInterval) (
 			// closing last bucket
 			truncatedTransaction := *latestTransaction
 			truncatedTransaction.Timestamp.Time = *truncatedTime
-			fmt.Println("appenging ", truncatedTransaction)
 			groupped = append(groupped, &truncatedTransaction)
 		}
 	}
@@ -75,5 +73,20 @@ func Truncate(t time.Time, interval GroupingInterval) (time.Time, error) {
 		return truncated, nil
 	default:
 		return t, fmt.Errorf("error calculating ceiling for interval %s from timestamp %s", interval, t)
+	}
+}
+
+func ParseGroupingInterval(input string) (GroupingInterval, error) {
+	switch input {
+	case string(Hour):
+		return Hour, nil
+	case string(Day):
+		return Day, nil
+	case string(Week):
+		return Week, nil
+	case string(Month):
+		return Month, nil
+	default:
+		return "", fmt.Errorf("invalid grouping interval %s", input)
 	}
 }
