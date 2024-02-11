@@ -6,7 +6,6 @@ import (
 	"time"
 )
 
-// working with Timestamp with expectation of UTC
 type Transaction struct {
 	Value     int      `json:"value"`
 	Timestamp UnixTime `json:"timestamp"`
@@ -16,6 +15,8 @@ func (t *Transaction) String() string {
 	return fmt.Sprint(*t)
 }
 
+// this should allow working with input files
+// where timestamp is encoded as unix timestamp
 type UnixTime struct {
 	time.Time
 }

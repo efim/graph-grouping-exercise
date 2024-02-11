@@ -8,31 +8,25 @@ import (
 	"time"
 )
 
-func TestGrouping(t *testing.T) {
+func TestGroupingByMonth(t *testing.T) {
 	filepath := "test-data/example-transactions-1.json"
 	fileContent, err := ioutil.ReadFile(filepath)
-
 	if err != nil {
 		t.Fatal(err)
 	}
-
 	var inputTransactions []*Transaction
 	err = json.Unmarshal(fileContent, &inputTransactions)
-
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	expectedResultsFilepath := "test-data/example-result-1.json"
 	expectedResultsFileContent, err := ioutil.ReadFile(expectedResultsFilepath)
-
 	if err != nil {
 		t.Fatal(err)
 	}
-
 	var expectedTransactions []*Transaction
 	err = json.Unmarshal(expectedResultsFileContent, &expectedTransactions)
-
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,10 +40,10 @@ func TestGrouping(t *testing.T) {
 		t.Error("unequal lengths of groupped and expected: ", grouppedByDay, expectedTransactions)
 	}
 
-	for i, v := range grouppedByDay {
+	for i, grouppedTransaction := range grouppedByDay {
 		expected := expectedTransactions[i]
-		if !reflect.DeepEqual(v, expected) {
-			t.Errorf("slices differ at index %d : %s not equal to expected %s", i, v, expected)
+		if !reflect.DeepEqual(grouppedTransaction, expected) {
+			t.Errorf("slices differ at index %d : %s not equal to expected %s", i, grouppedTransaction, expected)
 		}
 	}
 }
@@ -83,6 +77,7 @@ func TestTruncateToDay(t *testing.T) {
 	}
 
 }
+
 func TestTruncateToWeek(t *testing.T) {
 	testTime := time.Date(2024, time.February, 14, 15, 4, 5, 0, time.UTC)
 	truncated, err := Truncate(testTime, Week)
@@ -97,6 +92,7 @@ func TestTruncateToWeek(t *testing.T) {
 	}
 
 }
+
 func TestTruncateToMonth(t *testing.T) {
 	testTime := time.Date(2006, time.January, 2, 15, 4, 5, 0, time.UTC)
 	truncated, err := Truncate(testTime, Month)

@@ -14,6 +14,11 @@ const (
 	Month                  = "month"
 )
 
+// groups and returns transactions withing provided interval
+// within the interval latest transaction is returned with timestamp of the interval start
+//
+// Note: the function expects somewhat sorted order - for all transactions of
+// the same interval to be next to each other
 func GroupTransactions(transactions []*Transaction, interval GroupingInterval) ([]*Transaction, error) {
 	groupped := make([]*Transaction, 0)
 	var truncatedTime *time.Time
@@ -56,6 +61,8 @@ func GroupTransactions(transactions []*Transaction, interval GroupingInterval) (
 	return groupped, nil
 }
 
+// truncates t to the lower bound of interval
+// - hour, day, week, month
 func Truncate(t time.Time, interval GroupingInterval) (time.Time, error) {
 	switch interval {
 	case Hour:
