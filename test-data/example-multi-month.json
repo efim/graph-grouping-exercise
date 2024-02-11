@@ -1,0 +1,30 @@
+[
+    {
+        "value": 3456,
+        "timestamp": 1610101800
+    },
+    {
+        "value": 2123,
+        "timestamp": 1610357400
+    },
+    {
+        "value": 6789,
+        "timestamp": 1613042400
+    },
+    {
+        "value": 7890,
+        "timestamp": 1613127000
+    },
+    {
+        "value": 8901,
+        "timestamp": 1617796400
+    },
+    {
+        "value": 9012,
+        "timestamp": 1617969200
+    },
+    {
+        "value": 1123,
+        "timestamp": 1618055600
+    }
+]

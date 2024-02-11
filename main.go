@@ -30,6 +30,11 @@ func run(filename string, intervalName string) error {
 		return err
 	}
 
+	fmt.Printf("Input transactions to be groupped by %s:\n", interval)
+	for _, transaction := range inputTransactions {
+		fmt.Println(transaction)
+	}
+
 	fmt.Println("Groupped transactions:")
 	for _, transaction := range grouppedTransactions {
 		fmt.Println(transaction)
