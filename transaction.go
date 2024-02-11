@@ -6,12 +6,12 @@ import (
 	"time"
 )
 
+// working with Timestamp with expectation of UTC
 type Transaction struct {
-	Value int `json:"value"`
+	Value     int      `json:"value"`
 	Timestamp UnixTime `json:"timestamp"`
 }
 
-// for reading & writing into json as second timestamp
 type UnixTime struct {
 	time.Time
 }
@@ -29,4 +29,3 @@ func (u *UnixTime) UnmarshalJSON(b []byte) error {
 func (u UnixTime) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("%d", (u.Time.Unix()))), nil
 }
-
